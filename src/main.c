@@ -35,25 +35,34 @@ void print_help(void)
     printf("%s", msg);
 }
 
-int get_file(char *src, const char *filename)
+char *get_file(char const *filename)
 {
-    src = malloc(sizeof(char) * 99999);
-	FILE *f = fopen(filename, "r");
+    #define MAXBUFLEN 1000000
 
-	if (f == NULL) 
-	{ 
-        free(src);
-		return -1;
+    char *src = malloc(sizeof(char) * MAXBUFLEN + 1);
+    FILE *fp = fopen(filename, "r");
+
+    if (fp != NULL) 
+    {
+        size_t len = fread(src, sizeof(char), MAXBUFLEN, fp);
+
+        if (ferror(fp) != 0) 
+        {
+            free(src);
+        } 
+
+        else 
+        {
+            src[len++] = '\0';
+        }
+
+        fclose(fp);
+        return src;
     }
 
-	if (fread(src, sizeof(char), 99999, f)) 
-	{ 
-		free(src);
-		return -2;
-	} 
-
-	fclose(f);
-    return 0;
+    free(src);
+    src = NULL;
+    return src;
 }
 
 char *get_input()
@@ -143,13 +152,11 @@ int main(int argc, char const **argv)
 
     else
     {
-        char *src = NULL;
-        int out = get_file(src, argv[2]);
+        char *src = get_file(argv[2]);
 
-        if (out < 0 || !src)
+        if (!src)
         {
             printf("ERROR: file '%s' not found!\n", argv[2]);
-            return 0;
         }
 
         int err = LANG_INITS[lang](src);
