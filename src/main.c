@@ -22,6 +22,43 @@ void print_help(void)
     printf(msg);
 }
 
+int get_file(char *src, const char *filename)
+{
+    int size = 0;
+
+	FILE *f = fopen(filename, "rb");
+
+	if (f == NULL) 
+	{ 
+		src = NULL;
+		return -1;
+    }
+
+	fseek(f, 0, SEEK_END);
+	size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	src = (char *) malloc(size + 1);
+
+	if (size != fread(src, sizeof(char), size, f)) 
+	{ 
+		free(src);
+		return -2;
+	} 
+
+	fclose(f);
+	src[size] = 0;
+
+	return size;
+}
+
+char *get_input()
+{
+    char *src = malloc(sizeof(char) * 256);
+    scanf("%s", src);
+    return src;
+}
+
 int main(int argc, char const **argv)
 {
     if (argc != 3)
@@ -29,4 +66,6 @@ int main(int argc, char const **argv)
         print_help();
         return -1;
     }
+
+    
 }
