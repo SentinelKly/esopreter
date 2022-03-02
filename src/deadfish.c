@@ -30,6 +30,10 @@ int deadfish_exec(char *src)
             case 'o':
                 printf("%i", accumulator);
                 break;
+            
+            case 'c':
+                printf("%c", accumulator);
+                break;
 
             default:
                 return ERR_INVALID_TOKEN;
