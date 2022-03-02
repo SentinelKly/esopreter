@@ -31,32 +31,23 @@ void print_help(void)
 
 int get_file(char *src, const char *filename)
 {
-    int size = 0;
-
-	FILE *f = fopen(filename, "rb");
+    src = malloc(sizeof(char) * 99999);
+	FILE *f = fopen(filename, "r");
 
 	if (f == NULL) 
 	{ 
-		src = NULL;
+        free(src);
 		return -1;
     }
 
-	fseek(f, 0, SEEK_END);
-	size = ftell(f);
-	fseek(f, 0, SEEK_SET);
-
-	src = (char *) malloc(size + 1);
-
-	if (size != fread(src, sizeof(char), size, f)) 
+	if (fread(src, sizeof(char), 99999, f)) 
 	{ 
 		free(src);
 		return -2;
 	} 
 
 	fclose(f);
-	src[size] = 0;
-
-	return size;
+    return 0;
 }
 
 char *get_input()
@@ -131,7 +122,6 @@ int main(int argc, char const **argv)
     if (argc != 3) {print_help(); return 0;}
 
     int lang = get_lang(argv[1]);
-    char *src = NULL;
 
     if (lang == -1) {print_help(); return 0;}
 
@@ -147,8 +137,17 @@ int main(int argc, char const **argv)
 
     else
     {
-        //LOAD SOURCE FILE
-        //CHECK FOR ERRORS
+        char *src = NULL;
+        int out = get_file(src, argv[2]);
+
+        if (out < 0 || !src)
+        {
+            printf("ERROR: file '%s' not found!\n", argv[2]);
+            return 0;
+        }
+
+        int err = LANG_INITS[lang](src);
+        if (err) {printf("ERROR: CODE %i", err);}
     }
 
     return 0;
