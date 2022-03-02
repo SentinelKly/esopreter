@@ -5,7 +5,7 @@ int df_init(char *src)
 
 }
 
-int df_reset(void)
+void df_reset(void)
 {
     
 }

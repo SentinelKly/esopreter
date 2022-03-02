@@ -1,39 +1,25 @@
 #include <stdio.h>
 #include "esolangs.h"
 
-typedef enum lang_t
-{
-    DEADFISH
-} lang_t;
+#define LCOUNT 1
+
+static int (*lang_inits[LCOUNT])(char *src) = {df_init};
+static void (*lang_resets[LCOUNT])(void) = {df_reset};
+
+static char *langs[LCOUNT] = {"-df"};
 
 void print_help(void)
 {
     char *msg = 
-    "ESOTERP COMMANDS:\n"
-    "-h         :   print this message\n"
-    "-df  <src> :   run deadfish (file)\n"
-    "-df  i     :   run deadfish (interactive)\n\n";
+    "Esopreter Help:\n"
+    "usage: esopreter <lang> <src>\n\n"
+    "Languages:\n"
+    "    -df    :   deadfish\n\n"
+    "Sources"
+    "    <file> :   source file\n"
+    "    i      :   interactive mode\n\n";
 
     printf(msg);
-}
-
-int init(char *src, lang_t lang)
-{
-    switch (lang)
-    {
-        case DEADFISH:
-            return df_init(src);
-    }
-}
-
-void reset(lang_t lang)
-{
-    switch (lang)
-        {
-            case DEADFISH:
-                df_reset();
-                break;
-        }
 }
 
 int main(int argc, char const **argv)
