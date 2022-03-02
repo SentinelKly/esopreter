@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "esolangs.h"
 
 #ifdef _WIN32
@@ -10,14 +6,14 @@
     define CLEAR() system("clear")
 #endif
 
-#define LCOUNT    1
+#define LCOUNT    2
 #define MODE_INT  0
 #define MODE_PERS 1
 
-static int (*LANG_INITS[LCOUNT])(char *src) = {deadfish_exec};
-static void (*LANG_RESETS[LCOUNT])(void) = {deadfish_reset};
+static int (*LANG_INITS[LCOUNT])(char *src) = {deadfish_exec, brainfuck_exec};
+static void (*LANG_RESETS[LCOUNT])(void) = {deadfish_reset, brainfuck_reset};
 
-static char *LANGS[LCOUNT] = {"-deadfish"};
+static char *LANGS[LCOUNT] = {"-deadfish", "-brainfuck"};
 static char *COMMANDS[2] = {"#exit", "#clear"};
 
 void print_help(void)
@@ -26,7 +22,8 @@ void print_help(void)
     "\nEsopreter Help:\n"
     "usage: esopreter <lang> <src>\n\n"
     "Languages:\n"
-    "    -deadfish\n\n"
+    "    -deadfish\n"
+    "    -brainfuck\n\n"
     "Sources\n"
     "    <file> :   source file\n"
     "    ip     :   interactive persistent\n"
@@ -95,6 +92,7 @@ int resolve_commands(char *src, int mode, int lang)
     if (!strcmp(src, COMMANDS[0]))
     {
         exit(0);
+        return 1;
     }
 
     else if (!strcmp(src, COMMANDS[1]))

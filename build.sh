@@ -1,2 +1,2 @@
 mkdir bin
-gcc src/main.c src/deadfish.c -o bin/esopreter
+gcc src/main.c src/deadfish.c src/brainfuck.c -o bin/esopreter
