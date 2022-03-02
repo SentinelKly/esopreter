@@ -4,6 +4,12 @@
 
 #include "esolangs.h"
 
+#ifdef _WIN32
+#   define CLEAR() system("cls")
+#else
+    define CLEAR() system("clear")
+#endif
+
 #define LCOUNT    1
 #define MODE_INT  0
 #define MODE_PERS 1
@@ -84,7 +90,7 @@ int resolve_commands(char *src, int mode, int lang)
 
     else if (!strcmp(src, COMMANDS[1]))
     {
-        system("clear");
+        CLEAR();
         print_persistance(mode, lang);
         return 1;
     }
