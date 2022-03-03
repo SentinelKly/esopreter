@@ -17,9 +17,9 @@ static char *COMMANDS[2] = {"#exit", "#clear"};
 void print_help(void)
 {
     char *msg = 
-    "\nEsopreter Help:\n"
+    "\nEsopreter Help\n"
     "usage: esopreter <lang> <src>\n\n"
-    "Languages:\n"
+    "Languages\n"
     "    -deadfish\n"
     "    -brainfuck\n\n"
     "Sources\n"
