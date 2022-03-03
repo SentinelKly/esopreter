@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #   define CLEAR() system("cls")
 #else
-    define CLEAR() system("clear")
+#   define CLEAR() system("clear")
 #endif
 
 #define MAX_FILE_BUFF 100000000
