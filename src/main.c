@@ -6,12 +6,10 @@
     define CLEAR() system("clear")
 #endif
 
-#define LCOUNT    2
-#define MODE_INT  0
-#define MODE_PERS 1
+#define MAX_FILE_BUFF 100000000
+#define LCOUNT 2
 
 static int (*LANG_INITS[LCOUNT])(char *src) = {deadfish_exec, brainfuck_exec};
-static void (*LANG_RESETS[LCOUNT])(void) = {deadfish_reset, brainfuck_reset};
 
 static char *LANGS[LCOUNT] = {"-deadfish", "-brainfuck"};
 static char *COMMANDS[2] = {"#exit", "#clear"};
@@ -26,7 +24,6 @@ void print_help(void)
     "    -brainfuck\n\n"
     "Sources\n"
     "    <file> :   source file\n"
-    "    ip     :   interactive persistent\n"
     "    i      :   interactive mode\n\n";
 
     printf("%s", msg);
@@ -34,14 +31,12 @@ void print_help(void)
 
 char *get_file(char const *filename)
 {
-    #define MAXBUFLEN 1000000
-
-    char *src = malloc(sizeof(char) * MAXBUFLEN + 1);
+    char *src = malloc(sizeof(char) * MAX_FILE_BUFF + 1);
     FILE *fp = fopen(filename, "r");
 
     if (fp != NULL) 
     {
-        size_t len = fread(src, sizeof(char), MAXBUFLEN, fp);
+        size_t len = fread(src, sizeof(char), MAX_FILE_BUFF, fp);
 
         if (ferror(fp) != 0) 
         {
@@ -82,12 +77,8 @@ int get_lang(const char *lang)
     return -1;
 }
 
-void print_persistance(int mode, int lang)
-{
-    printf("-%s%s interactive mode--\n\n", LANGS[lang], (mode == MODE_PERS) ? " persistant" : "");
-}
 
-int resolve_commands(char *src, int mode, int lang)
+int resolve_commands(char *src, int lang)
 {
     if (!strcmp(src, COMMANDS[0]))
     {
@@ -98,16 +89,16 @@ int resolve_commands(char *src, int mode, int lang)
     else if (!strcmp(src, COMMANDS[1]))
     {
         CLEAR();
-        print_persistance(mode, lang);
+         printf("-%s interactive mode--\n\n", LANGS[lang]);
         return 1;
     }
 
     return 0;
 }
 
-void interactive_mode(int mode, int lang)
+void interactive_mode(int lang)
 {
-    print_persistance(mode, lang);
+     printf("-%s interactive mode--\n\n", LANGS[lang]);
 
         while (1)
         {
@@ -116,17 +107,12 @@ void interactive_mode(int mode, int lang)
 
             if (src[0] == '#')
             {
-                int res = resolve_commands(src, mode, lang);
+                int res = resolve_commands(src, lang);
                 continue;
             }
 
             int err = LANG_INITS[lang](src);
             if (err) {printf("ERROR: CODE %i", err);}
-
-            if (mode == MODE_INT)
-            {
-                LANG_RESETS[lang]();
-            }
         }
 }
 
@@ -138,14 +124,9 @@ int main(int argc, char const **argv)
 
     if (lang == -1) {print_help(); return 0;}
 
-    if (!strcmp(argv[2], "ip"))
+    if (!strcmp(argv[2], "i"))
     {
-        interactive_mode(MODE_PERS, lang);
-    }
-
-    else if (!strcmp(argv[2], "i"))
-    {
-        interactive_mode(MODE_INT, lang);
+        interactive_mode(lang);
     }
 
     else
@@ -155,6 +136,7 @@ int main(int argc, char const **argv)
         if (!src)
         {
             printf("ERROR: file '%s' not found!\n", argv[2]);
+            return 0;
         }
 
         int err = LANG_INITS[lang](src);

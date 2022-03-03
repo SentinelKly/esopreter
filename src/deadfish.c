@@ -1,17 +1,12 @@
 #include "esolangs.h"
 
-static short accumulator = 0x0;
-
 int deadfish_exec(char *src)
 {
+    short accumulator = 0x0;
+
     for (int i = 0; i < strlen(src); i++)
     {
         char ins = src[i];
-
-        if (ins == '\n' || ins == '\r' || ins == '\t' || ins == ' ')
-        {
-            continue;
-        }
 
         switch (ins)
         {
@@ -34,10 +29,6 @@ int deadfish_exec(char *src)
             case 'c':
                 printf("%c", accumulator);
                 break;
-
-            default:
-                return ERR_INVALID_TOKEN;
-                break;
         }
 
         if (accumulator == -1 || accumulator == 256)
@@ -47,9 +38,4 @@ int deadfish_exec(char *src)
     }
 
     return 0;
-}
-
-void deadfish_reset()
-{
-    accumulator = 0;
 }
