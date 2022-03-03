@@ -2,10 +2,10 @@
 A tiny interpreter for some esoteric languages
 
 ```
-Esopreter Help:
+Esopreter Help
 usage: esopreter <lang> <src>
 
-Languages:
+Languages
     -deadfish
     -brainfuck
 
