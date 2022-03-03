@@ -8,7 +8,7 @@ int brainfuck_exec(char *src)
     unsigned char *tape = malloc(sizeof(unsigned char) * tmult * BF_TAPE_SIZE);
     memset(tape, 0, sizeof(unsigned char) * tmult * BF_TAPE_SIZE);
 
-    for (size_t pc = 0;src[pc] != 0;pc++)
+    for (size_t pc = 0; src[pc] != 0; pc++)
     {
         unsigned char ins = src[pc];
 
