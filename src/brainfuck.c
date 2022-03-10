@@ -5,6 +5,8 @@ int brainfuck_exec(char *src)
     size_t tptr = 0;
     size_t tmult = 1;
 
+    unsigned char input[1] = {0};
+
     unsigned char *tape = malloc(sizeof(unsigned char) * tmult * BF_TAPE_SIZE);
     memset(tape, 0, sizeof(unsigned char) * tmult * BF_TAPE_SIZE);
 
@@ -41,7 +43,9 @@ int brainfuck_exec(char *src)
                 break;
 
             case ',':
-                //get user input
+                printf("input> ");
+                scanf("%s", input);
+                tape[tptr] = *input;
                 break;
 
             case '[':
@@ -92,5 +96,6 @@ int brainfuck_exec(char *src)
         if (tape[tptr] < 0) tape[tptr] += 256;
     }
 
+    free(tape);
     return 0;
 }
