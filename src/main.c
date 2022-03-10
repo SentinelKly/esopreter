@@ -38,15 +38,8 @@ char *get_file(char const *filename)
     {
         size_t len = fread(src, sizeof(char), MAX_FILE_BUFF, fp);
 
-        if (ferror(fp) != 0) 
-        {
-            free(src);
-        } 
-
-        else 
-        {
-            src[len++] = '\0';
-        }
+        if (ferror(fp) != 0)  free(src);
+        else src[len++] = '\0';
 
         fclose(fp);
         return src;
@@ -68,10 +61,7 @@ int get_lang(const char *lang)
 {
     for (int i = 0; i < LCOUNT; i++)
     {
-        if (!strcmp(lang, LANGS[i]))
-        {
-            return i;
-        }
+        if (!strcmp(lang, LANGS[i]))  return i;
     }
 
     return -1;
@@ -89,7 +79,7 @@ int resolve_commands(char *src, int lang)
     else if (!strcmp(src, COMMANDS[1]))
     {
         CLEAR();
-         printf("-%s interactive mode--\n\n", LANGS[lang]);
+        printf("-%s interactive mode--\n\n", LANGS[lang]);
         return 1;
     }
 
