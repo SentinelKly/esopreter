@@ -103,6 +103,7 @@ void interactive_mode(int lang)
 
             int err = LANG_INITS[lang](src);
             if (err) {printf("ERROR: CODE %i", err);}
+            free(src);
         }
 }
 
